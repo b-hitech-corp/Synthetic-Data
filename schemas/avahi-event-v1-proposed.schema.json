@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://minelogx.example/schemas/avahi-event-v1-proposed.schema.json",
+  "title": "MineLogX proposed Avahi event envelope",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "message_id",
+    "schema_version",
+    "tenant_id",
+    "site_id",
+    "message_type",
+    "asset_id",
+    "asset_type",
+    "timestamp",
+    "sequence_no"
+  ],
+  "properties": {
+    "message_id": { "type": "string", "format": "uuid" },
+    "schema_version": { "const": "1.0" },
+    "tenant_id": { "type": "string", "minLength": 1 },
+    "site_id": { "type": "string", "minLength": 1 },
+    "message_type": { "type": "string", "minLength": 1 },
+    "asset_id": { "type": "string", "minLength": 1 },
+    "asset_type": { "type": "string", "minLength": 1 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "sequence_no": { "type": "integer", "minimum": 0 },
+    "location": {
+      "type": "object",
+      "properties": {
+        "lat": { "type": ["number", "null"], "minimum": -90, "maximum": 90 },
+        "lon": { "type": ["number", "null"], "minimum": -180, "maximum": 180 },
+        "heading": { "type": ["number", "null"], "minimum": 0, "exclusiveMaximum": 360 },
+        "speed_kmh": { "type": ["number", "null"], "minimum": 0 },
+        "zone": { "type": ["string", "null"] }
+      }
+    },
+    "haul_cycle": {
+      "type": "object",
+      "properties": {
+        "cycle_id": { "type": "string" },
+        "cycle_state": { "type": "string" },
+        "payload_tonnes": { "type": ["number", "null"], "minimum": 0 },
+        "target_payload_tonnes": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "fuel": {
+      "type": "object",
+      "properties": {
+        "total_litres": { "type": ["number", "null"], "minimum": 0 },
+        "level_pct": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+        "engine_on": { "type": ["boolean", "null"] },
+        "idle_flag": { "type": ["boolean", "null"] }
+      }
+    },
+    "operating": { "type": "object" },
+    "diagnostics": { "type": "object" },
+    "equipment_health": { "type": "object" },
+    "air_quality": { "type": "object" },
+    "data_quality": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

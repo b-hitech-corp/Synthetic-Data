@@ -1,0 +1,27 @@
+[project]
+name = "minelogx-synthetic-telemetry"
+version = "0.1.0"
+description = "Configurable Avahi-compatible synthetic telemetry generator for MineLogX Phase 2"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+mqtt = ["paho-mqtt>=2.1,<3"]
+dev = ["pytest>=8,<9", "ruff>=0.9"]
+
+[project.scripts]
+mlx-synth = "minelogx_synthetic.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/minelogx_synthetic"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

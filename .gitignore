@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+dist/
+build/
+output/
+buffer/
+certs/
+*.pem
+*.key
+*.crt
+.env

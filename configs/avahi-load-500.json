@@ -1,0 +1,67 @@
+{
+  "schema": {
+    "schema_version": "1.0",
+    "topic_version": "v1",
+    "topic_template": "minelogx/{topic_version}/{tenant_id}/{site_id}/{message_type}/{asset_type}/{asset_id}",
+    "metadata_authority": "topic",
+    "engine_hours_decimals": 2,
+    "fuel_mode": "cumulative_total_litres",
+    "distance_mode": "cumulative_odometer_km"
+  },
+  "generation": {
+    "seed": 42,
+    "cadence_seconds": 5,
+    "duration_seconds": 60,
+    "anomaly_rate": 0.05,
+    "burst": {
+      "enabled": false,
+      "events_per_second": 250,
+      "duration_seconds": 10
+    }
+  },
+  "connectivity": {
+    "mqtt_qos": 1,
+    "buffer_enabled": true,
+    "buffer_path": "buffer/load-500.sqlite3",
+    "max_buffer_events": 100000,
+    "retry_max_attempts": 5,
+    "retry_backoff_seconds": [1, 2, 4, 8, 16],
+    "replay_rate_per_second": 100
+  },
+  "tenants": [
+    {
+      "tenant_id": "acme-mining",
+      "sites": [
+        {
+          "site_id": "site-01",
+          "assets": [
+            {"asset_id_pattern": "ACME-S01-TRUCK-{index:03d}", "count": 100, "asset_type": "haul_truck", "domain": "fleet"},
+            {"asset_id_pattern": "ACME-S01-CRUSHER-{index:03d}", "count": 25, "asset_type": "fixed_crusher", "domain": "equipment_health"},
+            {"asset_id_pattern": "ACME-S01-AQ-{index:03d}", "count": 25, "asset_type": "sensor_station", "domain": "environmental"}
+          ]
+        },
+        {
+          "site_id": "site-02",
+          "assets": [
+            {"asset_id_pattern": "ACME-S02-TRUCK-{index:03d}", "count": 100, "asset_type": "haul_truck", "domain": "fleet"},
+            {"asset_id_pattern": "ACME-S02-CRUSHER-{index:03d}", "count": 25, "asset_type": "fixed_crusher", "domain": "equipment_health"},
+            {"asset_id_pattern": "ACME-S02-AQ-{index:03d}", "count": 25, "asset_type": "sensor_station", "domain": "environmental"}
+          ]
+        }
+      ]
+    },
+    {
+      "tenant_id": "beta-minerals",
+      "sites": [
+        {
+          "site_id": "north-site",
+          "assets": [
+            {"asset_id_pattern": "BETA-NORTH-TRUCK-{index:03d}", "count": 100, "asset_type": "haul_truck", "domain": "fleet"},
+            {"asset_id_pattern": "BETA-NORTH-CRUSHER-{index:03d}", "count": 50, "asset_type": "fixed_crusher", "domain": "equipment_health"},
+            {"asset_id_pattern": "BETA-NORTH-AQ-{index:03d}", "count": 50, "asset_type": "sensor_station", "domain": "environmental"}
+          ]
+        }
+      ]
+    }
+  ]
+}
