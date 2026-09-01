@@ -107,3 +107,11 @@ repository.
 - Live AWS IoT publishing is implemented but cannot be declared end-to-end
   validated until Avahi supplies a permitted endpoint, certificate, and policy.
 - Units and schema decisions remain proposed until discovery sign-off.
+
+## Included data samples
+
+- `samples/telemetry.*`: small nine-event example for quickly reviewing the
+  payload shape across the three domains.
+- `samples/load-500-one-minute/telemetry.*`: one-minute load sample containing
+  6,000 events from 500 unique assets across two tenants and three sites,
+  provided as JSONL, CSV, and CSV.GZ.
