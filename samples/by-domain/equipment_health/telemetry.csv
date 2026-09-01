@@ -1,4 +1,4 @@
 message_id,schema_version,tenant_id,site_id,message_type,asset_id,asset_type,timestamp,sequence_no,equipment_health.operating_state,equipment_health.bearing_temp_c,equipment_health.vibration_m_s2,equipment_health.hydraulic_pressure_psi,equipment_health.health_index,operating.engine_hours,diagnostics.battery_voltage,diagnostics.fault_codes
-edafb271-3b71-4167-9158-8eed699b9ee4,1.0,acme-mining,site-01,equipment_health,CRUSHER-01,fixed_crusher,2026-09-01T16:18:01.711Z,1,running,68.7,4.2,3033.5,1.0,13318.44,24.1,[]
-ee6b406b-0458-4bcc-8e02-e549f048f6ec,1.0,acme-mining,site-01,equipment_health,CRUSHER-01,fixed_crusher,2026-09-01T16:18:06.711Z,2,running,75.4,4.09,3086.8,1.0,13318.44,24.4,[]
-560fbd57-9bc1-4383-b416-9c17dd1d797d,1.0,acme-mining,site-01,equipment_health,CRUSHER-01,fixed_crusher,2026-09-01T16:18:11.711Z,3,running,69.1,4.47,3087.7,0.999,13318.45,24.9,[]
+037037c9-80f2-4b08-99b9-e6010f971ccf,1.0,acme-mining,site-01,equipment_health,CRUSHER-01,fixed_crusher,2026-09-01T20:17:58.113Z,1,running,68.7,4.2,3033.5,1.0,13318.44,24.1,[]
+61279a8c-5e1d-4cfa-b5fc-543afc2ed4fc,1.0,acme-mining,site-01,equipment_health,CRUSHER-01,fixed_crusher,2026-09-01T20:18:03.113Z,2,running,75.4,4.09,3086.8,1.0,13318.44,24.4,[]
+d3eaf994-358d-467c-901b-2dc6162f5667,1.0,acme-mining,site-01,equipment_health,CRUSHER-01,fixed_crusher,2026-09-01T20:18:08.113Z,3,running,69.1,4.47,3087.7,0.999,13318.45,24.9,[]

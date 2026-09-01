@@ -1,4 +1,4 @@
 message_id,schema_version,tenant_id,site_id,message_type,asset_id,asset_type,timestamp,sequence_no,safety.event_type,safety.severity,safety.alert_flag,safety.geofence_violation,safety.speeding_flag,safety.harsh_braking_flag,safety.fatigue_risk_flag
-2f6d9afa-a0d5-4d27-a6dc-676c77808552,1.0,acme-mining,site-01,safety_event,SAFETY-001,safety_gateway,2026-09-01T16:18:01.711Z,1,none,none,False,False,False,False,False
-6fe327e4-345b-471a-b4ba-d7083d1f415a,1.0,acme-mining,site-01,safety_event,SAFETY-001,safety_gateway,2026-09-01T16:18:06.711Z,2,none,none,False,False,False,False,False
-4d37e921-4273-4210-a506-b02060c26ced,1.0,acme-mining,site-01,safety_event,SAFETY-001,safety_gateway,2026-09-01T16:18:11.711Z,3,none,none,False,False,False,False,False
+d9371dc3-a904-4eca-8efe-077b0683d0dc,1.0,acme-mining,site-01,safety_event,SAFETY-001,safety_gateway,2026-09-01T20:17:58.113Z,1,none,none,False,False,False,False,False
+d9f3268d-8e27-45b0-a51c-5895ebeb43a2,1.0,acme-mining,site-01,safety_event,SAFETY-001,safety_gateway,2026-09-01T20:18:03.113Z,2,none,none,False,False,False,False,False
+7a78d9d1-6f6a-4acd-803a-b83720026712,1.0,acme-mining,site-01,safety_event,SAFETY-001,safety_gateway,2026-09-01T20:18:08.113Z,3,none,none,False,False,False,False,False

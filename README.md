@@ -151,3 +151,6 @@ repository.
   domain batches, each provided as JSONL, CSV, and CSV.GZ for easier S3 review.
 - `samples/load-500-one-minute/s3-ready-csv/`: six uniquely named CSV files for
   a predecessor-style manual upload through the AWS S3 console.
+- `samples/load-500-one-minute/s3-ready-jsonl/` and `s3-ready-csv-gz/`: the same
+  six domain batches in Avahi's other requested formats. Store each format under
+  a separate S3 validation prefix and connect only one to ingestion.

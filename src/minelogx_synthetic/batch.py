@@ -73,8 +73,14 @@ def write_batches_by_domain(
         message_type: write_batch(group, target / message_type)
         for message_type, group in sorted(groups.items())
     }
-    csv_bundle = output_root / "s3-ready-csv"
-    csv_bundle.mkdir(parents=True, exist_ok=True)
+    bundles = {
+        "jsonl": (output_root / "s3-ready-jsonl", ".jsonl"),
+        "csv": (output_root / "s3-ready-csv", ".csv"),
+        "csv_gz": (output_root / "s3-ready-csv-gz", ".csv.gz"),
+    }
+    for directory, _ in bundles.values():
+        directory.mkdir(parents=True, exist_ok=True)
     for message_type, paths in result.items():
-        shutil.copyfile(paths["csv"], csv_bundle / f"{message_type}.csv")
+        for kind, (directory, suffix) in bundles.items():
+            shutil.copyfile(paths[kind], directory / f"{message_type}{suffix}")
     return result
