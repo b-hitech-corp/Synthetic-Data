@@ -149,3 +149,5 @@ repository.
   provided as JSONL, CSV, and CSV.GZ.
 - `samples/load-500-one-minute/by-domain/`: the same events separated into six
   domain batches, each provided as JSONL, CSV, and CSV.GZ for easier S3 review.
+- `samples/load-500-one-minute/s3-ready-csv/`: six uniquely named CSV files for
+  a predecessor-style manual upload through the AWS S3 console.

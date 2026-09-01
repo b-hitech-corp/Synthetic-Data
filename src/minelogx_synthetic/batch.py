@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import gzip
 import json
+import shutil
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -66,8 +67,14 @@ def write_batches_by_domain(
             raise ValueError(f"Unsafe message_type for output path: {message_type}")
         groups.setdefault(safe_name, []).append(event)
 
-    target = Path(output_dir) / "by-domain"
-    return {
+    output_root = Path(output_dir)
+    target = output_root / "by-domain"
+    result = {
         message_type: write_batch(group, target / message_type)
         for message_type, group in sorted(groups.items())
     }
+    csv_bundle = output_root / "s3-ready-csv"
+    csv_bundle.mkdir(parents=True, exist_ok=True)
+    for message_type, paths in result.items():
+        shutil.copyfile(paths["csv"], csv_bundle / f"{message_type}.csv")
+    return result

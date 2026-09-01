@@ -64,6 +64,7 @@ def test_batch_can_be_split_by_domain(tmp_path: Path) -> None:
         "safety_event",
     }
     assert all(group["csv"].exists() for group in paths.values())
+    assert len(list((tmp_path / "s3-ready-csv").glob("*.csv"))) == 6
 
 
 def test_load_configuration_expands_to_500_unique_assets() -> None:
