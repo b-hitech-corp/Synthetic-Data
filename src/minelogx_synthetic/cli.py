@@ -48,6 +48,12 @@ def build_parser() -> argparse.ArgumentParser:
     upload.add_argument("--region", help="AWS region")
     upload.add_argument("--dry-run", action="store_true", help="Show upload plan without AWS access")
     upload.add_argument("--overwrite", action="store_true", help="Replace existing S3 objects")
+    upload.add_argument(
+        "--layout",
+        choices=("combined", "by-domain", "all"),
+        default="combined",
+        help="Choose one ingestion layout; 'all' duplicates events and is for review only",
+    )
     return parser
 
 
@@ -117,6 +123,7 @@ def main() -> int:
             region=args.region,
             dry_run=args.dry_run,
             overwrite=args.overwrite,
+            layout=args.layout,
         )
         print(json.dumps(result, indent=2))
         return 0

@@ -9,7 +9,9 @@ from typing import Any
 ALLOWED_FILES = ("telemetry.jsonl", "telemetry.csv", "telemetry.csv.gz")
 
 
-def build_manifest(source: str | Path, bucket: str, prefix: str) -> dict[str, Any]:
+def build_manifest(
+    source: str | Path, bucket: str, prefix: str, layout: str = "combined"
+) -> dict[str, Any]:
     root = Path(source)
     if not root.is_dir():
         raise ValueError(f"Source directory does not exist: {root}")
@@ -17,25 +19,31 @@ def build_manifest(source: str | Path, bucket: str, prefix: str) -> dict[str, An
     if not bucket.strip() or not clean_prefix:
         raise ValueError("Both bucket and a non-empty prefix are required")
 
+    if layout not in {"combined", "by-domain", "all"}:
+        raise ValueError("layout must be combined, by-domain, or all")
+
     files = []
-    for name in ALLOWED_FILES:
-        path = root / name
-        if not path.is_file():
-            raise ValueError(f"Required generated file is missing: {path}")
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        key = f"{clean_prefix}/{name}"
-        files.append(
-            {
-                "name": name,
-                "path": str(path.resolve()),
-                "s3_uri": f"s3://{bucket}/{key}",
-                "key": key,
-                "bytes": path.stat().st_size,
-                "sha256": digest,
-            }
-        )
+    if layout in {"combined", "all"}:
+        for name in ALLOWED_FILES:
+            path = root / name
+            if not path.is_file():
+                raise ValueError(f"Required generated file is missing: {path}")
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            key = f"{clean_prefix}/{name}"
+            files.append(
+                {
+                    "name": name,
+                    "path": str(path.resolve()),
+                    "s3_uri": f"s3://{bucket}/{key}",
+                    "key": key,
+                    "bytes": path.stat().st_size,
+                    "sha256": digest,
+                }
+            )
     domain_root = root / "by-domain"
-    if domain_root.is_dir():
+    if layout in {"by-domain", "all"}:
+        if not domain_root.is_dir():
+            raise ValueError(f"Domain batch directory does not exist: {domain_root}")
         for domain_dir in sorted(path for path in domain_root.iterdir() if path.is_dir()):
             if not domain_dir.name.replace("_", "").isalnum():
                 raise ValueError(f"Unsafe domain directory: {domain_dir}")
@@ -56,7 +64,9 @@ def build_manifest(source: str | Path, bucket: str, prefix: str) -> dict[str, An
                         "sha256": digest,
                     }
                 )
-    return {"bucket": bucket, "prefix": clean_prefix, "files": files}
+        if not files:
+            raise ValueError(f"No domain batches found under: {domain_root}")
+    return {"bucket": bucket, "prefix": clean_prefix, "layout": layout, "files": files}
 
 
 def upload_directory(
@@ -67,8 +77,9 @@ def upload_directory(
     region: str | None = None,
     dry_run: bool = False,
     overwrite: bool = False,
+    layout: str = "combined",
 ) -> dict[str, Any]:
-    manifest = build_manifest(source, bucket, prefix)
+    manifest = build_manifest(source, bucket, prefix, layout=layout)
     if dry_run:
         return {"status": "dry-run", **manifest}
 

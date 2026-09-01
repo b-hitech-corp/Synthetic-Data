@@ -108,15 +108,17 @@ mlx-synth upload-s3 `
   --bucket "<approved-phase2-bucket>" `
   --prefix "phase2/synthetic/2026-09-01" `
   --profile "<approved-profile>" `
+  --layout by-domain `
   --dry-run
 
 # Remove --dry-run only after bucket, prefix and authorization are confirmed.
 ```
 
-The uploader checks access, uploads the consolidated telemetry files plus any
-complete batches found under `by-domain`, refuses to overwrite existing objects
-by default, and writes a local checksum manifest after success. It does not
-create buckets.
+The uploader checks access, uploads either the consolidated batch or the six
+domain batches, refuses to overwrite existing objects by default, and writes a
+local checksum manifest after success. Do not use `--layout all` on an ingestion
+prefix: it contains duplicate representations of the same events. The uploader
+does not create buckets.
 
 ## Contract status
 

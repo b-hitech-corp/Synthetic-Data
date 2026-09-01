@@ -25,8 +25,8 @@ def test_s3_plan_includes_complete_domain_batches(tmp_path: Path) -> None:
     for name in ALLOWED_FILES:
         (domain / name).write_bytes(name.encode())
 
-    result = build_manifest(tmp_path, "bucket", "prefix")
-    assert len(result["files"]) == 6
+    result = build_manifest(tmp_path, "bucket", "prefix", layout="by-domain")
+    assert len(result["files"]) == 3
     assert any("by-domain/fleet_telemetry/telemetry.csv" in item["key"] for item in result["files"])
 
 
