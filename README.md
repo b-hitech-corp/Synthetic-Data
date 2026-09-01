@@ -43,6 +43,7 @@ python -m minelogx_synthetic generate `
   --config configs/avahi-load-500.json `
   --duration 60 `
   --output output/load-500 `
+  --split-by-domain `
   --preview 0
 
 # Exercise topics and payloads without connecting to AWS
@@ -112,9 +113,10 @@ mlx-synth upload-s3 `
 # Remove --dry-run only after bucket, prefix and authorization are confirmed.
 ```
 
-The uploader checks access, uploads only the three generated telemetry files,
-refuses to overwrite existing objects by default, and writes a local checksum
-manifest after success. It does not create buckets.
+The uploader checks access, uploads the consolidated telemetry files plus any
+complete batches found under `by-domain`, refuses to overwrite existing objects
+by default, and writes a local checksum manifest after success. It does not
+create buckets.
 
 ## Contract status
 
@@ -142,3 +144,5 @@ repository.
 - `samples/load-500-one-minute/telemetry.*`: one-minute load sample containing
   6,000 events from 500 unique assets across two tenants and three sites,
   provided as JSONL, CSV, and CSV.GZ.
+- `samples/load-500-one-minute/by-domain/`: the same events separated into six
+  domain batches, each provided as JSONL, CSV, and CSV.GZ for easier S3 review.

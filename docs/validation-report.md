@@ -39,7 +39,7 @@ Cadence: 5 seconds per asset
 
 ## Automated implementation tests
 
-Nine tests pass locally, covering:
+Eleven tests pass locally, covering:
 
 - all six representative domains;
 - equivalent batch output creation;
@@ -49,6 +49,7 @@ Nine tests pass locally, covering:
 - aggregate burst-rate behavior;
 - buffering on failure and replay after recovery.
 - safe S3 upload planning, checksums, and incomplete-batch rejection.
+- generation and S3 discovery of six separated domain batches.
 
 ## Not yet validated
 

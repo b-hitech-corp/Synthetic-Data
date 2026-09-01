@@ -4,7 +4,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from minelogx_synthetic.batch import write_batch
+from minelogx_synthetic.batch import write_batch, write_batches_by_domain
 from minelogx_synthetic.config import load_config
 from minelogx_synthetic.generator import generate_events
 
@@ -48,6 +48,22 @@ def test_batch_outputs_are_equivalent(tmp_path: Path) -> None:
     assert json.loads(json_lines[0])["message_id"] == events[0]["message_id"]
     assert paths["csv"].exists()
     assert paths["csv_gz"].exists()
+
+
+def test_batch_can_be_split_by_domain(tmp_path: Path) -> None:
+    config = load_config(CONFIG)
+    events = list(generate_events(config, duration_seconds=5))
+    paths = write_batches_by_domain(events, tmp_path)
+
+    assert set(paths) == {
+        "air_quality",
+        "equipment_health",
+        "fleet_telemetry",
+        "maintenance_event",
+        "production_telemetry",
+        "safety_event",
+    }
+    assert all(group["csv"].exists() for group in paths.values())
 
 
 def test_load_configuration_expands_to_500_unique_assets() -> None:

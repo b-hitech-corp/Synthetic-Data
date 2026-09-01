@@ -1,0 +1,4 @@
+message_id,schema_version,tenant_id,site_id,message_type,asset_id,asset_type,timestamp,sequence_no,production.operating_state,production.material_type,production.throughput_tph,production.target_throughput_tph,production.total_tonnes,production.load_count,production.production_loss_reason,production.alert_flag,diagnostics.fault_codes
+960f0a78-1216-4381-b420-347cc7b52bde,1.0,acme-mining,site-01,production_telemetry,PROD-001,production_meter,2026-09-01T16:14:12.674Z,1,running,ore,1522.4,1800.0,1247081.6,1924,,False,[]
+9d5cea66-6ac5-414d-98c4-c86292f533de,1.0,acme-mining,site-01,production_telemetry,PROD-001,production_meter,2026-09-01T16:14:17.674Z,2,running,ore,1561.1,1800.0,1247083.7,1925,,False,[]
+0fb2e388-3f3a-4abc-b477-8fc3e76decc2,1.0,acme-mining,site-01,production_telemetry,PROD-001,production_meter,2026-09-01T16:14:22.674Z,3,running,ore,1804.8,1800.0,1247086.2,1926,,False,[]

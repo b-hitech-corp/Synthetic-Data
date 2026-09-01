@@ -1,0 +1,4 @@
+message_id,schema_version,tenant_id,site_id,message_type,asset_id,asset_type,timestamp,sequence_no,air_quality.pm2_5_ug_m3,air_quality.pm10_ug_m3,air_quality.dust_mg_m3,air_quality.ambient_temp_c,air_quality.relative_humidity_pct,air_quality.alert_flag
+cd87282d-1078-45d0-8eed-2b03a7396724,1.0,acme-mining,site-01,air_quality,AQ-001,sensor_station,2026-09-01T16:14:12.674Z,1,12.3,45.8,0.57,21.5,41.2,False
+15d6f033-a118-433b-9182-2be718689791,1.0,acme-mining,site-01,air_quality,AQ-001,sensor_station,2026-09-01T16:14:17.674Z,2,13.8,47.9,0.15,25.9,62.8,False
+24ddef5b-5361-4add-b604-23960ca56382,1.0,acme-mining,site-01,air_quality,AQ-001,sensor_station,2026-09-01T16:14:22.674Z,3,12.7,22.7,0.05,29.6,61.0,False

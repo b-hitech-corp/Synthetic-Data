@@ -34,6 +34,28 @@ def build_manifest(source: str | Path, bucket: str, prefix: str) -> dict[str, An
                 "sha256": digest,
             }
         )
+    domain_root = root / "by-domain"
+    if domain_root.is_dir():
+        for domain_dir in sorted(path for path in domain_root.iterdir() if path.is_dir()):
+            if not domain_dir.name.replace("_", "").isalnum():
+                raise ValueError(f"Unsafe domain directory: {domain_dir}")
+            for name in ALLOWED_FILES:
+                path = domain_dir / name
+                if not path.is_file():
+                    raise ValueError(f"Incomplete domain batch; missing: {path}")
+                digest = hashlib.sha256(path.read_bytes()).hexdigest()
+                relative = path.relative_to(root).as_posix()
+                key = f"{clean_prefix}/{relative}"
+                files.append(
+                    {
+                        "name": name,
+                        "path": str(path.resolve()),
+                        "s3_uri": f"s3://{bucket}/{key}",
+                        "key": key,
+                        "bytes": path.stat().st_size,
+                        "sha256": digest,
+                    }
+                )
     return {"bucket": bucket, "prefix": clean_prefix, "files": files}
 
 

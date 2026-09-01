@@ -47,3 +47,27 @@ def write_batch(events: Iterable[dict[str, Any]], output_dir: str | Path) -> dic
             target_gzip.write(chunk)
 
     return {"jsonl": jsonl_path, "csv": csv_path, "csv_gz": gzip_path}
+
+
+def write_batches_by_domain(
+    events: Iterable[dict[str, Any]], output_dir: str | Path
+) -> dict[str, dict[str, Path]]:
+    rows = list(events)
+    if not rows:
+        raise ValueError("Cannot split an empty batch")
+
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for event in rows:
+        message_type = event.get("message_type")
+        if not isinstance(message_type, str) or not message_type:
+            raise ValueError("Every event must contain a non-empty message_type")
+        safe_name = message_type.replace("-", "_")
+        if not safe_name.replace("_", "").isalnum():
+            raise ValueError(f"Unsafe message_type for output path: {message_type}")
+        groups.setdefault(safe_name, []).append(event)
+
+    target = Path(output_dir) / "by-domain"
+    return {
+        message_type: write_batch(group, target / message_type)
+        for message_type, group in sorted(groups.items())
+    }

@@ -5,7 +5,7 @@ import json
 import logging
 from pathlib import Path
 
-from .batch import write_batch
+from .batch import write_batch, write_batches_by_domain
 from .config import load_config
 from .generator import generate_events
 from .publishers import DryRunPublisher, MqttPublisher
@@ -22,6 +22,11 @@ def build_parser() -> argparse.ArgumentParser:
     generate.add_argument("--output", default="output", help="Output directory")
     generate.add_argument("--duration", type=float, help="Override duration in seconds")
     generate.add_argument("--preview", type=int, default=3, help="Events to print")
+    generate.add_argument(
+        "--split-by-domain",
+        action="store_true",
+        help="Also write one JSONL/CSV/CSV.GZ batch per message type",
+    )
 
     stream = subparsers.add_parser("stream", help="Stream events through MQTT or dry-run")
     stream.add_argument("--config", required=True, help="Path to the JSON configuration")
@@ -50,12 +55,15 @@ def run_generate(args: argparse.Namespace) -> int:
     config = load_config(args.config)
     events = list(generate_events(config, duration_seconds=args.duration))
     paths = write_batch(events, args.output)
+    domain_paths = write_batches_by_domain(events, args.output) if args.split_by_domain else {}
 
     for event in events[: max(args.preview, 0)]:
         print(json.dumps(event, indent=2))
     print(f"Generated {len(events)} events from {len(config.assets)} assets")
     for kind, path in paths.items():
         print(f"{kind}: {Path(path).resolve()}")
+    if domain_paths:
+        print(f"domain_batches: {len(domain_paths)} under {(Path(args.output) / 'by-domain').resolve()}")
     return 0
 
 

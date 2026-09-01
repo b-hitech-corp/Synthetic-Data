@@ -1,0 +1,4 @@
+message_id,schema_version,tenant_id,site_id,message_type,asset_id,asset_type,timestamp,sequence_no,maintenance.status,maintenance.downtime_active,maintenance.downtime_reason,maintenance.downtime_minutes_total,maintenance.work_order_id,maintenance.priority,maintenance.inspection_due
+db6c26e8-ffbb-4775-986b-2d5319888cb4,1.0,acme-mining,site-01,maintenance_event,MAINT-001,maintenance_gateway,2026-09-01T16:14:12.674Z,1,available,False,,0.0,,,False
+e3107a07-6503-443a-95f4-5dd26b58007b,1.0,acme-mining,site-01,maintenance_event,MAINT-001,maintenance_gateway,2026-09-01T16:14:17.674Z,2,available,False,,0.0,,,False
+12a29ff0-2e4d-4b91-9c05-f850d2b4700b,1.0,acme-mining,site-01,maintenance_event,MAINT-001,maintenance_gateway,2026-09-01T16:14:22.674Z,3,available,False,,0.0,,,False

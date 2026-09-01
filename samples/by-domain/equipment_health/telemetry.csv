@@ -1,0 +1,4 @@
+message_id,schema_version,tenant_id,site_id,message_type,asset_id,asset_type,timestamp,sequence_no,equipment_health.operating_state,equipment_health.bearing_temp_c,equipment_health.vibration_m_s2,equipment_health.hydraulic_pressure_psi,equipment_health.health_index,operating.engine_hours,diagnostics.battery_voltage,diagnostics.fault_codes
+a22c3fca-7142-42c5-ae5f-fe3195f5f8fe,1.0,acme-mining,site-01,equipment_health,CRUSHER-01,fixed_crusher,2026-09-01T16:14:12.674Z,1,running,68.7,4.2,3033.5,1.0,13318.44,24.1,[]
+d3f772b7-d716-4ad4-94fa-d3b3d15ccb93,1.0,acme-mining,site-01,equipment_health,CRUSHER-01,fixed_crusher,2026-09-01T16:14:17.674Z,2,running,75.4,4.09,3086.8,1.0,13318.44,24.4,[]
+3e52914c-affd-49d8-82c0-51ba48669e71,1.0,acme-mining,site-01,equipment_health,CRUSHER-01,fixed_crusher,2026-09-01T16:14:22.674Z,3,running,69.1,4.47,3087.7,0.999,13318.45,24.9,[]
