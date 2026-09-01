@@ -49,6 +49,21 @@
               "asset_id": "AQ-001",
               "asset_type": "sensor_station",
               "domain": "environmental"
+            },
+            {
+              "asset_id": "PROD-001",
+              "asset_type": "production_meter",
+              "domain": "production"
+            },
+            {
+              "asset_id": "MAINT-001",
+              "asset_type": "maintenance_gateway",
+              "domain": "maintenance"
+            },
+            {
+              "asset_id": "SAFETY-001",
+              "asset_type": "safety_gateway",
+              "domain": "safety"
             }
           ]
         }

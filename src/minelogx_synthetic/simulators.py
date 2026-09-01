@@ -21,6 +21,9 @@ class AssetState:
     longitude: float = -71.537500
     cycle_index: int = 1
     cycle_step: int = 0
+    total_tonnes: float = 0.0
+    load_count: int = 0
+    downtime_minutes_total: float = 0.0
 
 
 class Simulator:
@@ -42,6 +45,8 @@ class Simulator:
             fuel_level_pct=rng.uniform(25, 95),
             latitude=-16.590400 + rng.uniform(-0.08, 0.08),
             longitude=-71.537500 + rng.uniform(-0.08, 0.08),
+            total_tonnes=rng.uniform(100_000, 2_000_000),
+            load_count=rng.randint(500, 20_000),
         )
 
     def next_event(self, timestamp: datetime, elapsed_seconds: float) -> dict[str, Any]:
@@ -189,6 +194,94 @@ class EnvironmentalSimulator(Simulator):
         }
 
 
+class ProductionSimulator(Simulator):
+    def _measurements(self, elapsed_seconds: float) -> dict[str, Any]:
+        anomaly = self.rng.random() < self.anomaly_rate
+        target_tph = 1_800.0
+        throughput_tph = self.rng.uniform(1_500, 1_900)
+        operating_state = "running"
+        production_loss_reason = None
+        fault_codes: list[str] = []
+        if anomaly:
+            throughput_tph = self.rng.uniform(250, 800)
+            operating_state = self.rng.choice(["degraded", "stopped"])
+            production_loss_reason = self.rng.choice(
+                ["crusher_trip", "conveyor_blockage", "feed_shortage"]
+            )
+            fault_codes = ["PRODUCTION_RATE_LOW"]
+
+        interval_tonnes = throughput_tph * elapsed_seconds / 3600
+        self.state.total_tonnes += interval_tonnes
+        if interval_tonnes > 0:
+            self.state.load_count += 1
+
+        return {
+            "production": {
+                "operating_state": operating_state,
+                "material_type": "ore",
+                "throughput_tph": round(throughput_tph, 1),
+                "target_throughput_tph": target_tph,
+                "total_tonnes": round(self.state.total_tonnes, 1),
+                "load_count": self.state.load_count,
+                "production_loss_reason": production_loss_reason,
+                "alert_flag": anomaly,
+            },
+            "diagnostics": {"fault_codes": fault_codes},
+        }
+
+
+class MaintenanceSimulator(Simulator):
+    def _measurements(self, elapsed_seconds: float) -> dict[str, Any]:
+        anomaly = self.rng.random() < self.anomaly_rate
+        status = "available"
+        downtime_active = False
+        downtime_reason = None
+        work_order_id = None
+        priority = None
+        if anomaly:
+            status = "unplanned_downtime"
+            downtime_active = True
+            downtime_reason = self.rng.choice(
+                ["mechanical_failure", "electrical_fault", "hydraulic_leak"]
+            )
+            work_order_id = f"WO-{self.asset.asset_id}-{self.state.sequence_no:06d}"
+            priority = "high"
+            self.state.downtime_minutes_total += elapsed_seconds / 60
+
+        return {
+            "maintenance": {
+                "status": status,
+                "downtime_active": downtime_active,
+                "downtime_reason": downtime_reason,
+                "downtime_minutes_total": round(self.state.downtime_minutes_total, 2),
+                "work_order_id": work_order_id,
+                "priority": priority,
+                "inspection_due": self.rng.random() < 0.02,
+            }
+        }
+
+
+class SafetySimulator(Simulator):
+    _event_types = ("overspeed", "geofence_violation", "harsh_braking", "fatigue_risk")
+
+    def _measurements(self, elapsed_seconds: float) -> dict[str, Any]:
+        del elapsed_seconds
+        anomaly = self.rng.random() < self.anomaly_rate
+        event_type = self.rng.choice(self._event_types) if anomaly else "none"
+        severity = self.rng.choice(["medium", "high", "critical"]) if anomaly else "none"
+        return {
+            "safety": {
+                "event_type": event_type,
+                "severity": severity,
+                "alert_flag": anomaly,
+                "geofence_violation": event_type == "geofence_violation",
+                "speeding_flag": event_type == "overspeed",
+                "harsh_braking_flag": event_type == "harsh_braking",
+                "fatigue_risk_flag": event_type == "fatigue_risk",
+            }
+        }
+
+
 def create_simulator(
     asset: AssetConfig,
     schema_version: str,
@@ -199,6 +292,9 @@ def create_simulator(
         "fleet": FleetSimulator,
         "equipment_health": EquipmentHealthSimulator,
         "environmental": EnvironmentalSimulator,
+        "production": ProductionSimulator,
+        "maintenance": MaintenanceSimulator,
+        "safety": SafetySimulator,
     }
     try:
         simulator_type = simulator_types[asset.domain]

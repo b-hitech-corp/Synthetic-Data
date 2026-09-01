@@ -8,12 +8,14 @@ CSV loop with a configurable canonical event model.
 ## Delivery scope
 
 - Proposed Avahi `v1` common event envelope
-- Fleet/haul, equipment-health, and environmental sample domains
+- Six sample domains: fleet/haul, equipment health, air quality, production,
+  maintenance, and safety
 - Near-real-time cadence and burst generation
 - Batch JSON Lines, CSV, and CSV.GZ output
 - MQTT/TLS QoS 1 publishing with persistent buffering and replay
 
-MQTT publishing will be implemented after the canonical samples are validated.
+MQTT publishing is implemented; live end-to-end validation remains dependent on
+Avahi-provided AWS IoT access.
 OPC UA, Modbus, and HTTP adapters are outside this immediate Avahi handoff.
 
 ## Requirements
@@ -21,6 +23,7 @@ OPC UA, Modbus, and HTTP adapters are outside this immediate Avahi handoff.
 - Python 3.11 or newer
 - No third-party dependency for batch generation and MQTT dry-run
 - `paho-mqtt` only for live MQTT publishing
+- `boto3` only for an explicitly approved direct S3 upload
 
 ## Run locally
 
@@ -89,6 +92,30 @@ produces 100 events/second, or 6,000 events/minute, before burst mode.
 Do not put AWS endpoints, certificates, private keys, or credentials in a
 configuration committed to Git.
 
+## Optional direct S3 handoff
+
+The one-pager's preferred batch route is API Gateway/Lambda to S3 Bronze. Use
+the command below only if Avahi confirms that a direct S3 handoff is approved.
+It requires an existing AWS profile/SSO session, never embedded access keys.
+
+```powershell
+python -m pip install -e ".[aws]"
+
+# Verify the exact destination without connecting to AWS
+mlx-synth upload-s3 `
+  --source samples/load-500-one-minute `
+  --bucket "<approved-phase2-bucket>" `
+  --prefix "phase2/synthetic/2026-09-01" `
+  --profile "<approved-profile>" `
+  --dry-run
+
+# Remove --dry-run only after bucket, prefix and authorization are confirmed.
+```
+
+The uploader checks access, uploads only the three generated telemetry files,
+refuses to overwrite existing objects by default, and writes a local checksum
+manifest after success. It does not create buckets.
+
 ## Contract status
 
 The schema is **proposed**, not a signed production contract. Open decisions are
@@ -110,8 +137,8 @@ repository.
 
 ## Included data samples
 
-- `samples/telemetry.*`: small nine-event example for quickly reviewing the
-  payload shape across the three domains.
+- `samples/telemetry.*`: small 18-event example for quickly reviewing the
+  payload shape across all six domains.
 - `samples/load-500-one-minute/telemetry.*`: one-minute load sample containing
   6,000 events from 500 unique assets across two tenants and three sites,
   provided as JSONL, CSV, and CSV.GZ.

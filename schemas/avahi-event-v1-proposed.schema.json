@@ -57,6 +57,9 @@
     "diagnostics": { "type": "object" },
     "equipment_health": { "type": "object" },
     "air_quality": { "type": "object" },
+    "production": { "type": "object" },
+    "maintenance": { "type": "object" },
+    "safety": { "type": "object" },
     "data_quality": {
       "type": "object",
       "additionalProperties": { "type": "string" }

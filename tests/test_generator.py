@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "configs" / "avahi-validation.json"
 
 
-def test_generates_all_three_domains() -> None:
+def test_generates_all_six_domains() -> None:
     config = load_config(CONFIG)
     events = list(
         generate_events(
@@ -23,11 +23,14 @@ def test_generates_all_three_domains() -> None:
         )
     )
 
-    assert len(events) == 3
+    assert len(events) == 6
     assert {event["message_type"] for event in events} == {
         "fleet_telemetry",
         "equipment_health",
         "air_quality",
+        "production_telemetry",
+        "maintenance_event",
+        "safety_event",
     }
     for event in events:
         assert event["sequence_no"] == 1

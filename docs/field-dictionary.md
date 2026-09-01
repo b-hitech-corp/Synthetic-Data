@@ -70,6 +70,43 @@ Ranges are simulator defaults for validation, not production/OEM guarantees.
 | `air_quality.relative_humidity_pct` | number | % | 1 | 25 to 75 simulated | No |
 | `air_quality.alert_flag` | boolean | — | — | simulated threshold/anomaly flag | No |
 
+## Production
+
+| Field | Type | Unit | Precision | Semantics | Required |
+|---|---|---|---:|---|---:|
+| `production.operating_state` | string | state | - | running/degraded/stopped | Domain-specific |
+| `production.material_type` | string | material registry | - | simulated as ore | No |
+| `production.throughput_tph` | number | metric tonnes/hour | 1 | instantaneous interval rate | No |
+| `production.target_throughput_tph` | number | metric tonnes/hour | 1 | target rate | No |
+| `production.total_tonnes` | number | metric tonnes | 1 | cumulative counter | No |
+| `production.load_count` | integer | count | 0 | cumulative counter | No |
+| `production.production_loss_reason` | string/null | reason registry | - | populated during loss | No |
+| `production.alert_flag` | boolean | - | - | low-production flag | No |
+
+## Maintenance
+
+| Field | Type | Unit | Precision | Semantics | Required |
+|---|---|---|---:|---|---:|
+| `maintenance.status` | string | state | - | available/unplanned_downtime | Domain-specific |
+| `maintenance.downtime_active` | boolean | - | - | current state | No |
+| `maintenance.downtime_reason` | string/null | reason registry | - | populated during downtime | No |
+| `maintenance.downtime_minutes_total` | number | minutes | 2 | cumulative counter | No |
+| `maintenance.work_order_id` | string/null | identifier | - | synthetic work-order reference | No |
+| `maintenance.priority` | string/null | priority registry | - | populated for work order | No |
+| `maintenance.inspection_due` | boolean | - | - | simulated due flag | No |
+
+## Safety
+
+| Field | Type | Unit | Precision | Semantics | Required |
+|---|---|---|---:|---|---:|
+| `safety.event_type` | string | event registry | - | none/overspeed/geofence/harsh braking/fatigue | Domain-specific |
+| `safety.severity` | string | severity registry | - | none/medium/high/critical | No |
+| `safety.alert_flag` | boolean | - | - | abnormal safety event | No |
+| `safety.geofence_violation` | boolean | - | - | event flag | No |
+| `safety.speeding_flag` | boolean | - | - | event flag | No |
+| `safety.harsh_braking_flag` | boolean | - | - | event flag | No |
+| `safety.fatigue_risk_flag` | boolean | - | - | event flag | No |
+
 ## Nullability and data quality
 
 A non-applicable group is omitted. An applicable but unavailable field is

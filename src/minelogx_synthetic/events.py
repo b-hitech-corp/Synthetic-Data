@@ -11,6 +11,9 @@ MESSAGE_TYPES = {
     "fleet": "fleet_telemetry",
     "equipment_health": "equipment_health",
     "environmental": "air_quality",
+    "production": "production_telemetry",
+    "maintenance": "maintenance_event",
+    "safety": "safety_event",
 }
 
 

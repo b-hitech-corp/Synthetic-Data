@@ -10,6 +10,7 @@ from .config import load_config
 from .generator import generate_events
 from .publishers import DryRunPublisher, MqttPublisher
 from .streaming import stream_events
+from .s3_upload import upload_directory
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -33,6 +34,15 @@ def build_parser() -> argparse.ArgumentParser:
     stream.add_argument("--ca", help="Path to the AWS IoT root CA")
     stream.add_argument("--cert", help="Path to the client certificate")
     stream.add_argument("--key", help="Path to the client private key")
+
+    upload = subparsers.add_parser("upload-s3", help="Upload generated batch files to S3")
+    upload.add_argument("--source", required=True, help="Directory containing generated files")
+    upload.add_argument("--bucket", required=True, help="Approved destination bucket")
+    upload.add_argument("--prefix", required=True, help="Approved destination prefix")
+    upload.add_argument("--profile", help="AWS CLI/SSO profile (uses default chain if omitted)")
+    upload.add_argument("--region", help="AWS region")
+    upload.add_argument("--dry-run", action="store_true", help="Show upload plan without AWS access")
+    upload.add_argument("--overwrite", action="store_true", help="Replace existing S3 objects")
     return parser
 
 
@@ -90,6 +100,18 @@ def main() -> int:
         return run_generate(args)
     if args.command == "stream":
         return run_stream(args)
+    if args.command == "upload-s3":
+        result = upload_directory(
+            source=args.source,
+            bucket=args.bucket,
+            prefix=args.prefix,
+            profile=args.profile,
+            region=args.region,
+            dry_run=args.dry_run,
+            overwrite=args.overwrite,
+        )
+        print(json.dumps(result, indent=2))
+        return 0
     raise RuntimeError(f"Unhandled command: {args.command}")
 
 

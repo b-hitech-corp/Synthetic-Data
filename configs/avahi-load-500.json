@@ -35,17 +35,23 @@
         {
           "site_id": "site-01",
           "assets": [
-            {"asset_id_pattern": "ACME-S01-TRUCK-{index:03d}", "count": 100, "asset_type": "haul_truck", "domain": "fleet"},
-            {"asset_id_pattern": "ACME-S01-CRUSHER-{index:03d}", "count": 25, "asset_type": "fixed_crusher", "domain": "equipment_health"},
-            {"asset_id_pattern": "ACME-S01-AQ-{index:03d}", "count": 25, "asset_type": "sensor_station", "domain": "environmental"}
+            {"asset_id_pattern": "ACME-S01-TRUCK-{index:03d}", "count": 80, "asset_type": "haul_truck", "domain": "fleet"},
+            {"asset_id_pattern": "ACME-S01-CRUSHER-{index:03d}", "count": 20, "asset_type": "fixed_crusher", "domain": "equipment_health"},
+            {"asset_id_pattern": "ACME-S01-AQ-{index:03d}", "count": 15, "asset_type": "sensor_station", "domain": "environmental"},
+            {"asset_id_pattern": "ACME-S01-PROD-{index:03d}", "count": 20, "asset_type": "production_meter", "domain": "production"},
+            {"asset_id_pattern": "ACME-S01-MAINT-{index:03d}", "count": 10, "asset_type": "maintenance_gateway", "domain": "maintenance"},
+            {"asset_id_pattern": "ACME-S01-SAFETY-{index:03d}", "count": 5, "asset_type": "safety_gateway", "domain": "safety"}
           ]
         },
         {
           "site_id": "site-02",
           "assets": [
-            {"asset_id_pattern": "ACME-S02-TRUCK-{index:03d}", "count": 100, "asset_type": "haul_truck", "domain": "fleet"},
-            {"asset_id_pattern": "ACME-S02-CRUSHER-{index:03d}", "count": 25, "asset_type": "fixed_crusher", "domain": "equipment_health"},
-            {"asset_id_pattern": "ACME-S02-AQ-{index:03d}", "count": 25, "asset_type": "sensor_station", "domain": "environmental"}
+            {"asset_id_pattern": "ACME-S02-TRUCK-{index:03d}", "count": 80, "asset_type": "haul_truck", "domain": "fleet"},
+            {"asset_id_pattern": "ACME-S02-CRUSHER-{index:03d}", "count": 20, "asset_type": "fixed_crusher", "domain": "equipment_health"},
+            {"asset_id_pattern": "ACME-S02-AQ-{index:03d}", "count": 15, "asset_type": "sensor_station", "domain": "environmental"},
+            {"asset_id_pattern": "ACME-S02-PROD-{index:03d}", "count": 20, "asset_type": "production_meter", "domain": "production"},
+            {"asset_id_pattern": "ACME-S02-MAINT-{index:03d}", "count": 10, "asset_type": "maintenance_gateway", "domain": "maintenance"},
+            {"asset_id_pattern": "ACME-S02-SAFETY-{index:03d}", "count": 5, "asset_type": "safety_gateway", "domain": "safety"}
           ]
         }
       ]
@@ -56,9 +62,12 @@
         {
           "site_id": "north-site",
           "assets": [
-            {"asset_id_pattern": "BETA-NORTH-TRUCK-{index:03d}", "count": 100, "asset_type": "haul_truck", "domain": "fleet"},
-            {"asset_id_pattern": "BETA-NORTH-CRUSHER-{index:03d}", "count": 50, "asset_type": "fixed_crusher", "domain": "equipment_health"},
-            {"asset_id_pattern": "BETA-NORTH-AQ-{index:03d}", "count": 50, "asset_type": "sensor_station", "domain": "environmental"}
+            {"asset_id_pattern": "BETA-NORTH-TRUCK-{index:03d}", "count": 80, "asset_type": "haul_truck", "domain": "fleet"},
+            {"asset_id_pattern": "BETA-NORTH-CRUSHER-{index:03d}", "count": 30, "asset_type": "fixed_crusher", "domain": "equipment_health"},
+            {"asset_id_pattern": "BETA-NORTH-AQ-{index:03d}", "count": 20, "asset_type": "sensor_station", "domain": "environmental"},
+            {"asset_id_pattern": "BETA-NORTH-PROD-{index:03d}", "count": 30, "asset_type": "production_meter", "domain": "production"},
+            {"asset_id_pattern": "BETA-NORTH-MAINT-{index:03d}", "count": 20, "asset_type": "maintenance_gateway", "domain": "maintenance"},
+            {"asset_id_pattern": "BETA-NORTH-SAFETY-{index:03d}", "count": 20, "asset_type": "safety_gateway", "domain": "safety"}
           ]
         }
       ]

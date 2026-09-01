@@ -1,6 +1,6 @@
 # Avahi synthetic telemetry MVP validation report
 
-Validation date: 2026-08-29
+Validation date: 2026-09-01
 
 Configuration: `configs/avahi-load-500.json`
 
@@ -15,11 +15,14 @@ Cadence: 5 seconds per asset
 | Unique assets | 500 |
 | Tenants | 2 |
 | Sites | 3 |
-| Fleet events | 3,600 |
-| Equipment-health events | 1,200 |
-| Air-quality events | 1,200 |
-| Detected abnormal events | 313 |
-| Observed anomaly rate | 5.22% |
+| Fleet events | 2,880 |
+| Equipment-health events | 840 |
+| Air-quality events | 600 |
+| Production events | 840 |
+| Maintenance events | 480 |
+| Safety events | 360 |
+| Detected abnormal events | 285 |
+| Observed anomaly rate | 4.75% |
 
 ## Structural checks
 
@@ -32,19 +35,20 @@ Cadence: 5 seconds per asset
 | JSONL event count | PASS — 6,000 |
 | CSV output created | PASS |
 | CSV.GZ output created and readable | PASS |
-| Three domain groups represented | PASS |
+| Six domain groups represented | PASS |
 
 ## Automated implementation tests
 
-Seven tests pass locally, covering:
+Nine tests pass locally, covering:
 
-- all three representative domains;
+- all six representative domains;
 - equivalent batch output creation;
 - expansion to 500 unique configured assets;
 - MQTT topic construction;
 - buffer deduplication;
 - aggregate burst-rate behavior;
 - buffering on failure and replay after recovery.
+- safe S3 upload planning, checksums, and incomplete-batch rejection.
 
 ## Not yet validated
 
@@ -52,6 +56,7 @@ Seven tests pass locally, covering:
 - Certificate policy and per-tenant MQTT authorization
 - IoT Rule identity-match/quarantine behavior
 - Kinesis/Firehose/S3 Bronze end-to-end delivery
+- Direct S3 upload destination and authorization
 - Final signed-off topic, units, optionality, and field-name contract
 - Sustained production performance at 1,000 devices and burst load
 
