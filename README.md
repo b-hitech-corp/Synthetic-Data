@@ -109,6 +109,7 @@ mlx-synth upload-s3 `
   --prefix "phase2/synthetic/2026-09-01" `
   --profile "<approved-profile>" `
   --layout by-domain `
+  --format csv `
   --dry-run
 
 # Remove --dry-run only after bucket, prefix and authorization are confirmed.
@@ -117,8 +118,8 @@ mlx-synth upload-s3 `
 The uploader checks access, uploads either the consolidated batch or the six
 domain batches, refuses to overwrite existing objects by default, and writes a
 local checksum manifest after success. Do not use `--layout all` on an ingestion
-prefix: it contains duplicate representations of the same events. The uploader
-does not create buckets.
+prefix, or `--format all`, because they contain duplicate representations of the
+same events. The uploader does not create buckets.
 
 ## Contract status
 

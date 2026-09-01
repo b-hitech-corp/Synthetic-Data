@@ -10,7 +10,11 @@ ALLOWED_FILES = ("telemetry.jsonl", "telemetry.csv", "telemetry.csv.gz")
 
 
 def build_manifest(
-    source: str | Path, bucket: str, prefix: str, layout: str = "combined"
+    source: str | Path,
+    bucket: str,
+    prefix: str,
+    layout: str = "combined",
+    file_format: str = "csv",
 ) -> dict[str, Any]:
     root = Path(source)
     if not root.is_dir():
@@ -21,10 +25,19 @@ def build_manifest(
 
     if layout not in {"combined", "by-domain", "all"}:
         raise ValueError("layout must be combined, by-domain, or all")
+    format_files = {
+        "jsonl": ("telemetry.jsonl",),
+        "csv": ("telemetry.csv",),
+        "csv-gz": ("telemetry.csv.gz",),
+        "all": ALLOWED_FILES,
+    }
+    if file_format not in format_files:
+        raise ValueError("file_format must be jsonl, csv, csv-gz, or all")
+    selected_files = format_files[file_format]
 
     files = []
     if layout in {"combined", "all"}:
-        for name in ALLOWED_FILES:
+        for name in selected_files:
             path = root / name
             if not path.is_file():
                 raise ValueError(f"Required generated file is missing: {path}")
@@ -47,7 +60,7 @@ def build_manifest(
         for domain_dir in sorted(path for path in domain_root.iterdir() if path.is_dir()):
             if not domain_dir.name.replace("_", "").isalnum():
                 raise ValueError(f"Unsafe domain directory: {domain_dir}")
-            for name in ALLOWED_FILES:
+            for name in selected_files:
                 path = domain_dir / name
                 if not path.is_file():
                     raise ValueError(f"Incomplete domain batch; missing: {path}")
@@ -66,7 +79,13 @@ def build_manifest(
                 )
         if not files:
             raise ValueError(f"No domain batches found under: {domain_root}")
-    return {"bucket": bucket, "prefix": clean_prefix, "layout": layout, "files": files}
+    return {
+        "bucket": bucket,
+        "prefix": clean_prefix,
+        "layout": layout,
+        "file_format": file_format,
+        "files": files,
+    }
 
 
 def upload_directory(
@@ -78,8 +97,11 @@ def upload_directory(
     dry_run: bool = False,
     overwrite: bool = False,
     layout: str = "combined",
+    file_format: str = "csv",
 ) -> dict[str, Any]:
-    manifest = build_manifest(source, bucket, prefix, layout=layout)
+    manifest = build_manifest(
+        source, bucket, prefix, layout=layout, file_format=file_format
+    )
     if dry_run:
         return {"status": "dry-run", **manifest}
 

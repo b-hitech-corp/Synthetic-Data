@@ -12,7 +12,7 @@ def test_s3_dry_run_builds_checksummed_plan(tmp_path: Path) -> None:
         (tmp_path / name).write_bytes(name.encode())
     result = upload_directory(tmp_path, "approved-bucket", "phase2/test", dry_run=True)
     assert result["status"] == "dry-run"
-    assert len(result["files"]) == 3
+    assert len(result["files"]) == 1
     assert result["files"][0]["s3_uri"].startswith("s3://approved-bucket/phase2/test/")
     assert all(len(item["sha256"]) == 64 for item in result["files"])
 
@@ -26,7 +26,7 @@ def test_s3_plan_includes_complete_domain_batches(tmp_path: Path) -> None:
         (domain / name).write_bytes(name.encode())
 
     result = build_manifest(tmp_path, "bucket", "prefix", layout="by-domain")
-    assert len(result["files"]) == 3
+    assert len(result["files"]) == 1
     assert any("by-domain/fleet_telemetry/telemetry.csv" in item["key"] for item in result["files"])
 
 

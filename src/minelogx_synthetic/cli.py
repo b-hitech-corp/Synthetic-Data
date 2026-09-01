@@ -54,6 +54,13 @@ def build_parser() -> argparse.ArgumentParser:
         default="combined",
         help="Choose one ingestion layout; 'all' duplicates events and is for review only",
     )
+    upload.add_argument(
+        "--format",
+        dest="file_format",
+        choices=("jsonl", "csv", "csv-gz", "all"),
+        default="csv",
+        help="Upload one representation; 'all' is for review only",
+    )
     return parser
 
 
@@ -124,6 +131,7 @@ def main() -> int:
             dry_run=args.dry_run,
             overwrite=args.overwrite,
             layout=args.layout,
+            file_format=args.file_format,
         )
         print(json.dumps(result, indent=2))
         return 0
